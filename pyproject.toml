@@ -1,12 +1,12 @@
 [project]
-name = "gulax-agent"
+name = "gulax-mcp"
 version = "0.1.0"
-description = "Add your description here"
+description = "MCP server for the Gulax API"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "httpx>=0.28.1",
-    "mcp[cli]>=2,<3",
+    "mcp>=2,<3",
     "pydantic-settings>=2.15.0",
 ]
 
@@ -19,7 +19,7 @@ packages = ["src/gulax_mcp"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py312"
+target-version = "py313"
 
 [tool.ruff.lint]
 select = [
@@ -37,6 +37,7 @@ indent-style = "space"
 
 [dependency-groups]
 dev = [
+    "mcp[cli]>=2,<3",
     "mypy>=2.3.0",
     "pytest>=9.1.1",
     "pytest-asyncio>=1.4.0",

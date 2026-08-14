@@ -16,8 +16,6 @@ async def list_collections(query: CollectionListQuery, ctx: Context[AppContext])
         api_key=app.api_key.get_secret_value(),
     )
 
-    print(result.items[0].model_dump(mode="json"))
-
     return CollectionPage(
         items=[
             CollectionSummary(
