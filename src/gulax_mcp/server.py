@@ -1,0 +1,19 @@
+from mcp.server import MCPServer
+
+from gulax_mcp.lifespan import app_lifespan
+from gulax_mcp.tools.collections import register_collection_tools
+
+
+def create_server() -> MCPServer:
+    server = MCPServer("Kronos", lifespan=app_lifespan,)
+
+    register_collection_tools(server)
+
+    return server
+
+
+mcp = create_server()
+
+
+if __name__ == "__main__":
+    mcp.run()
