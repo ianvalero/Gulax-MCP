@@ -3,6 +3,7 @@ from importlib.metadata import version
 from mcp.server import MCPServer
 
 from gulax_mcp.lifespan import app_lifespan
+from gulax_mcp.resources.collections import register_collection_resources
 from gulax_mcp.tools.collections import register_collection_tools
 
 
@@ -20,6 +21,7 @@ def create_server() -> MCPServer:
     )
 
     register_collection_tools(server)
+    register_collection_resources(server)
 
     return server
 

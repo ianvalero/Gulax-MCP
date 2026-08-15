@@ -32,9 +32,9 @@ async def app_lifespan(server: MCPServer) -> AsyncIterator[AppContext]:
         follow_redirects=False,
         headers={
             "Accept": "application/json",
-            "User-Agent": "kronos-mcp",
+            "User-Agent": "gulax-mcp/0.1.0",
         },
     ) as http_client:
         kronos_client = KronosClient(http_client=http_client)
 
-        yield AppContext(kronos=kronos_client, api_key=settings.api_key)
+        yield AppContext(gulax=kronos_client, api_key=settings.api_key)

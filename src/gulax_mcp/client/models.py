@@ -29,3 +29,21 @@ class KronosCollectionPageDTO(BaseModel):
 
     items: list[KronosCollectionDTO]
     pagination: KronosPaginationDTO
+
+
+class KronosCollectionVectorsDTO(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
+    dimension: int | dict[str, int]
+    distance: str | dict[str, str]
+
+
+class KronosCollectionDetailsDTO(KronosCollectionDTO):
+    qdrant_name: str
+    status: str
+    vectors: KronosCollectionVectorsDTO | None
+
+    updated_at: datetime | None
+    updated_by: str | None
+    deleted_at: datetime | None
+    deleted_by: str | None

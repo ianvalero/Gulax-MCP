@@ -1,9 +1,18 @@
-import httpx
-from pydantic import ValidationError
+from collections.abc import Mapping, Sequence
+from typing import TypeVar
 
-from gulax_mcp.client.models import KronosCollectionPageDTO
+import httpx
+from pydantic import BaseModel, ValidationError
+
+from gulax_mcp.client.models import KronosCollectionDetailsDTO, KronosCollectionPageDTO
 from gulax_mcp.exceptions import KronosHTTPError, KronosInvalidResponseError, KronosTransportError
 from gulax_mcp.models.collection import CollectionListQuery
+
+ModelT = TypeVar("ModelT", bound=BaseModel)
+
+type QueryParamPrimitive = str | int | float | bool | None
+type QueryParamValue = QueryParamPrimitive | Sequence[QueryParamPrimitive]
+type QueryParams = Mapping[str, QueryParamValue]
 
 
 class KronosClient:
@@ -27,9 +36,36 @@ class KronosClient:
         if not query.roles:
             params.pop("roles", None)
 
+        return await self._get_model(
+            "/api/collections/",
+            params=params,
+            api_key=api_key,
+            response_model=KronosCollectionPageDTO,
+        )
+
+    async def get_collection(
+        self,
+        *,
+        collection_id: int,
+        api_key: str,
+    ) -> KronosCollectionDetailsDTO:
+        return await self._get_model(
+            f"/api/collections/{collection_id}",
+            api_key=api_key,
+            response_model=KronosCollectionDetailsDTO,
+        )
+
+    async def _get_model(
+        self,
+        path: str,
+        *,
+        api_key: str,
+        response_model: type[ModelT],
+        params: QueryParams | None = None,
+    ) -> ModelT:
         try:
             response = await self._http_client.get(
-                "/api/collections/",
+                path,
                 params=params,
                 headers={
                     "X-Api-Key": api_key,
@@ -44,9 +80,6 @@ class KronosClient:
             raise KronosHTTPError(status_code=response.status_code)
 
         try:
-            payload = response.json()
-            return KronosCollectionPageDTO.model_validate(payload)
+            return response_model.model_validate(response.json())
         except (ValueError, ValidationError) as exc:
-            raise KronosInvalidResponseError(
-                "Kronos returned an invalid collections response"
-            ) from exc
+            raise KronosInvalidResponseError("Kronos returned an invalid response") from exc

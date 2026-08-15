@@ -117,3 +117,15 @@ class CollectionPage(BaseModel):
 
     has_next: bool
     has_prev: bool
+
+class CollectionVectors(BaseModel):
+    dimension: int | dict[str, int]
+    distance: str | dict[str, str]
+
+
+class CollectionDetails(CollectionSummary):
+    status: str
+    vectors: CollectionVectors | None
+
+    updated_at: datetime | None
+    updated_by: str | None

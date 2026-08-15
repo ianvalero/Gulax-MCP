@@ -7,11 +7,16 @@ from gulax_mcp.models.collection import CollectionListQuery, CollectionPage, Col
 
 
 async def list_collections(query: CollectionListQuery, ctx: Context[AppContext]) -> CollectionPage:
-    """List collections accessible to the current Kronos user."""
+    """List Gulax collections accessible to the current user.
+
+    Use this tool to discover collections or filter them by name,
+    description, roles, creator, or creation date. Results can be
+    sorted and paginated.
+    """
 
     app = ctx.request_context.lifespan_context
 
-    result = await app.kronos.list_collections(
+    result = await app.gulax.list_collections(
         query=query,
         api_key=app.api_key.get_secret_value(),
     )
@@ -39,9 +44,10 @@ async def list_collections(query: CollectionListQuery, ctx: Context[AppContext])
 def register_collection_tools(server: MCPServer) -> None:
     server.add_tool(
         list_collections,
-        title="List Kronos collections",
+        title="List Gulax collections",
         annotations=ToolAnnotations(
             read_only_hint=True,
             open_world_hint=False,
         ),
+        structured_output=True,
     )
