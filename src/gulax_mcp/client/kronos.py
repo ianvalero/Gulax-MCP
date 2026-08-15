@@ -4,7 +4,9 @@ from typing import TypeVar
 import httpx
 from pydantic import BaseModel, ValidationError
 
-from gulax_mcp.client.models import KronosCollectionDetailsDTO, KronosCollectionPageDTO
+from gulax_mcp.client.models.collection import GulaxCollectionDetailsDTO, GulaxCollectionPageDTO
+from gulax_mcp.client.models.document import GulaxDocumentDTO
+from gulax_mcp.client.models.document_version import GulaxDocumentVersionDetailsDTO
 from gulax_mcp.exceptions import KronosHTTPError, KronosInvalidResponseError, KronosTransportError
 from gulax_mcp.models.collection import CollectionListQuery
 
@@ -30,7 +32,7 @@ class KronosClient:
         *,
         query: CollectionListQuery,
         api_key: str,
-    ) -> KronosCollectionPageDTO:
+    ) -> GulaxCollectionPageDTO:
         params = query.model_dump(mode="json", exclude_none=True)
 
         if not query.roles:
@@ -40,7 +42,7 @@ class KronosClient:
             "/api/collections/",
             params=params,
             api_key=api_key,
-            response_model=KronosCollectionPageDTO,
+            response_model=GulaxCollectionPageDTO,
         )
 
     async def get_collection(
@@ -48,11 +50,36 @@ class KronosClient:
         *,
         collection_id: int,
         api_key: str,
-    ) -> KronosCollectionDetailsDTO:
+    ) -> GulaxCollectionDetailsDTO:
         return await self._get_model(
             f"/api/collections/{collection_id}",
             api_key=api_key,
-            response_model=KronosCollectionDetailsDTO,
+            response_model=GulaxCollectionDetailsDTO,
+        )
+
+    async def get_document(
+        self,
+        *,
+        document_id: int,
+        api_key: str,
+    ) -> GulaxDocumentDTO:
+        return await self._get_model(
+            f"/api/documents/{document_id}",
+            api_key=api_key,
+            response_model=GulaxDocumentDTO,
+        )
+
+    async def get_document_version(
+        self,
+        *,
+        document_id: int,
+        document_version_id: int,
+        api_key: str,
+    ) -> GulaxDocumentVersionDetailsDTO:
+        return await self._get_model(
+            f"/api/documents/{document_id}/versions/{document_version_id}",
+            api_key=api_key,
+            response_model=GulaxDocumentVersionDetailsDTO,
         )
 
     async def _get_model(

@@ -19,9 +19,9 @@ async def get_collection_resource(
     app = ctx.request_context.lifespan_context
 
     try:
-        result = await app.gulax.get_collection(
+        result = await app.gulax.get_collection(    # type: ignore
             collection_id=collection_id,
-            api_key=app.api_key.get_secret_value(),
+            api_key=app.api_key.get_secret_value(), # type: ignore
         )
     except KronosHTTPError as exc:
         if exc.status_code == 404:

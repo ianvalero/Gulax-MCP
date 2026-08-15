@@ -2,18 +2,10 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
 
-
-class KronosPaginationDTO(BaseModel):
-    model_config = ConfigDict(extra="ignore")
-
-    offset: int
-    limit: int
-    total: int
-    has_next: bool
-    has_prev: bool
+from gulax_mcp.client.models.pagination import GulaxPaginationDTO
 
 
-class KronosCollectionDTO(BaseModel):
+class GulaxCollectionDTO(BaseModel):
     model_config = ConfigDict(extra="ignore")
 
     id: int
@@ -24,24 +16,24 @@ class KronosCollectionDTO(BaseModel):
     created_by: str
 
 
-class KronosCollectionPageDTO(BaseModel):
+class GulaxCollectionPageDTO(BaseModel):
     model_config = ConfigDict(extra="ignore")
 
-    items: list[KronosCollectionDTO]
-    pagination: KronosPaginationDTO
+    items: list[GulaxCollectionDTO]
+    pagination: GulaxPaginationDTO
 
 
-class KronosCollectionVectorsDTO(BaseModel):
+class GulaxCollectionVectorsDTO(BaseModel):
     model_config = ConfigDict(extra="ignore")
 
     dimension: int | dict[str, int]
     distance: str | dict[str, str]
 
 
-class KronosCollectionDetailsDTO(KronosCollectionDTO):
+class GulaxCollectionDetailsDTO(GulaxCollectionDTO):
     qdrant_name: str
     status: str
-    vectors: KronosCollectionVectorsDTO | None
+    vectors: GulaxCollectionVectorsDTO | None
 
     updated_at: datetime | None
     updated_by: str | None

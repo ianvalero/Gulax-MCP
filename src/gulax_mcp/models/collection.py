@@ -84,9 +84,7 @@ class CollectionListQuery(BaseModel):
             and self.created_at_to is not None
             and self.created_at_from > self.created_at_to
         ):
-            raise ValueError(
-                "created_at_from must be before or equal to created_at_to"
-            )
+            raise ValueError("created_at_from must be before or equal to created_at_to")
 
         return self
 
