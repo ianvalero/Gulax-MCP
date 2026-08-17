@@ -42,16 +42,12 @@ class CollectionListQuery(BaseModel):
 
     created_at_from: datetime | None = Field(
         default=None,
-        description=(
-            "Return collections created at or after this timestamp."
-        ),
+        description="Return collections created at or after this timestamp."
     )
 
     created_at_to: datetime | None = Field(
         default=None,
-        description=(
-            "Return collections created at or before this timestamp."
-        ),
+        description="Return collections created at or before this timestamp."
     )
 
     offset: int = Field(

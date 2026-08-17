@@ -60,7 +60,6 @@ class DocumentVersionListQuery(BaseModel):
 class DocumentVersionSummary(BaseModel):
     id: int
     document_id: int
-    filename: str
     original_filename: str
     uploaded_by: str
     uploaded_at: datetime
@@ -78,14 +77,6 @@ class DocumentVersionPage(BaseModel):
 
     has_next: bool
     has_prev: bool
-
-
-class DocumentVersionDetails(DocumentVersionSummary):
-    file_path: str
-    file_size: int
-    mime_type: str
-    qdrant_point_ids: list[str] | None
-    attempts: int
 
 
 class DocumentVersionTaskSummary(BaseModel):

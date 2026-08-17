@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 from gulax_mcp.client.models.collection import GulaxCollectionDTO
 from gulax_mcp.client.models.document_version import GulaxDocumentVersionDTO
@@ -20,7 +20,7 @@ class GulaxDocumentDTO(BaseModel):
     deleted_at: datetime | None = None
     deleted_by: str | None = None
 
-    documents_versions: list[GulaxDocumentVersionDTO] = list()
+    documents_versions: list[GulaxDocumentVersionDTO] = Field(default_factory=list)
 
 
 class GulaxDocumentPageDTO(BaseModel):

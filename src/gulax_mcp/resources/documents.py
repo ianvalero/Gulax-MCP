@@ -18,9 +18,9 @@ async def get_document_resource(
     app = ctx.request_context.lifespan_context
 
     try:
-        result = await app.gulax.get_document(    # type: ignore
+        result = await app.gulax.get_document(
             document_id=document_id,
-            api_key=app.api_key.get_secret_value(), # type: ignore
+            api_key=app.api_key.get_secret_value(),
         )
     except KronosHTTPError as exc:
         if exc.status_code == 404:
@@ -45,19 +45,18 @@ async def get_document_resource(
         updated_by=result.updated_by,
         deleted_at=result.deleted_at,
         deleted_by=result.deleted_by,
-        documents_versions=[
+        versions=[
             DocumentVersionSummary(
-                id=document_version.id,
-                document_id=document_version.document_id,
-                filename=document_version.filename,
-                original_filename=document_version.original_filename,
-                uploaded_by=document_version.uploaded_by,
-                uploaded_at=document_version.uploaded_at,
-                task_id=document_version.task_id,
-                error_message=document_version.error_message,
-                status=document_version.status,
+                id=version.id,
+                document_id=version.document_id,
+                original_filename=version.original_filename,
+                uploaded_by=version.uploaded_by,
+                uploaded_at=version.uploaded_at,
+                task_id=version.task_id,
+                error_message=version.error_message,
+                status=version.status,
             )
-            for document_version in result.documents_versions
+            for version in result.documents_versions
         ],
     )
 

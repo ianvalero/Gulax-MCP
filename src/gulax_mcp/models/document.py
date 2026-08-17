@@ -25,8 +25,9 @@ class DocumentSortField(StrEnum):
 class DocumentListQuery(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    collection_id: str | None = Field(
+    collection_id: int | None = Field(
         default=None,
+        gt=0,
         description="Filter documents by their collection ID.",
     )
 
@@ -47,16 +48,12 @@ class DocumentListQuery(BaseModel):
 
     created_at_from: datetime | None = Field(
         default=None,
-        description=(
-            "Return documents created at or after this timestamp."
-        ),
+        description="Return documents created at or after this timestamp."
     )
 
     created_at_to: datetime | None = Field(
         default=None,
-        description=(
-            "Return documents created at or before this timestamp."
-        ),
+        description="Return documents created at or before this timestamp."
     )
 
     include_deleted: bool = Field(
@@ -71,9 +68,10 @@ class DocumentListQuery(BaseModel):
     )
 
     limit: int = Field(
-        default=100,
+        default=20,
         ge=1,
-        description="Maximum number of matching documents to return.",
+        le=100,
+        description="Maximum number of documents to return.",
     )
 
     sort_by: DocumentSortField = Field(
@@ -109,7 +107,7 @@ class DocumentSummary(BaseModel):
     deleted_at: datetime | None
     deleted_by: str | None
 
-    documents_versions: list[DocumentVersionSummary] = list()
+    versions: list[DocumentVersionSummary] = Field(default_factory=list)
 
 
 class DocumentPage(BaseModel):
